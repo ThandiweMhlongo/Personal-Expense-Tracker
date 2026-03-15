@@ -1,0 +1,14 @@
+## Project Title: 
+SimpleSpend: Personal Expense Tracker
+
+## Domain: 
+Personal Finance
+
+## Problem Statement: 
+To provide a secure and simple way for users to track spending 
+without external bank integrations.
+
+## Individual Scope: 
+Feasibility is maintained by using a monolithic 
+architecture with a single backend service and a local database.
+
