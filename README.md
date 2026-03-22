@@ -7,3 +7,4 @@ SimpleSpend is a lightweight, web-based application designed to help individuals
 [SPECIFACTION.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/SPECIFICATION.md)
 [ARCHITECTURE.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/C4%20Architectural%20Diagrams)
 [Stakeholders.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/41fff5ca03dd330438ceb8d84cbcb5ff6ca43660/Stakeholders.md)
+[Requirements.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/fd4d5a3427908ef7d3796d65261f484b96b2c41a/REQUIREMENTS.md)
