@@ -1,8 +1,0 @@
-```mermaid
-graph LR
-    User[Primary User] --- SS[SimpleSpend System]
-    SS --- CurrencyAPI[External Currency API]
-    SS --- Backup[Local or Cloud Backup]
-
-    style SS fill:#f9f,stroke:#333,stroke-width:4px
-```
