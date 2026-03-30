@@ -1,14 +1,8 @@
-## Project Title: 
-SimpleSpend: Personal Expense Tracker
+```mermaid
+graph LR
+    User[Primary User] --- SS[SimpleSpend System]
+    SS --- CurrencyAPI[External Currency API]
+    SS --- Backup[Local or Cloud Backup]
 
-## Domain: 
-Personal Finance
-
-## Problem Statement: 
-To provide a secure and simple way for users to track spending 
-without external bank integrations.
-
-## Individual Scope: 
-Feasibility is maintained by using a monolithic 
-architecture with a single backend service and a local database.
-
+    style SS fill:#f9f,stroke:#333,stroke-width:4px
+```
