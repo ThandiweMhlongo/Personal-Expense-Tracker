@@ -31,3 +31,31 @@
 |US-010 | manage backups | Could-have | 4 | None|
 |US-011| retention metrics | Won't-have | 5 | US-001 |
 |US-12 | system containerized | Should-have | 3| None |
+
+## Sprint Backlog Table
+Contribution to MVP: This sprint focuses on the two most critical pillars of the Minimum Viable Product: User Authentication and Expense Logging. By completing these, we ensure the app is secure (Bcrypt) and functional (users can record data), providing the baseline value required for the first release.
+
+| Task ID | Task description | User Story Link| Estimated Hours| Status |
+|----------|------------|---------------------|----------|---------|
+|T-001| Create database schema for User and Expense tables| US-001, US-002 | 4| To Do|
+| T-002 | Develop Backend API for User Registration | US-001 | 8 | In Progress |
+|T-003 | Integrate Bcrypt library for password hashing | US-009 | 3 |To Do |
+| T-004 | Design Responsive Login/Sign-up UI | US-001 | 6 | To Do |
+|T-005 | Build "Add Expense" Form with validation | US-002 | 5| To Do |
+| T-006 | Develop API endpoint to POST new expenses | US-002 | 6| To Do|
+
+## Reflection: The Internal Struggle of Being My Own Stakeholder
+
+The Challenge of Prioritization
+The biggest challenge in this project was playing two roles at once. As the Stakeholder, I wanted my app to have every possible feature, like currency converters and fancy charts. But as the Developer who actually has to build it, I felt a lot of resistance because I knew how much work that would take.
+
+Using the MoSCoW method helped me settle this "internal argument." I had to be honest and move things I wanted (like currency switching) into the "Could-have" category so I could focus on what the app actually needs to work (like secure login and logging expenses). It was hard to admit that some "cool" features weren't actually "Must-haves" for a passing grade.
+
+Estimation vs. Reality
+When I started Effort Estimation, I was too optimistic. I thought adding Bcrypt hashing would be a "1-point" task (very easy). However, when I sat down to actually plan the database and the logic, the "developer" in me started feeling stressed. I realized that security is never that simple. I had to increase my estimates from 1 to 3 points. This shows how easy it is to underestimate technical work when you are just looking at a "bubble" on a Use Case diagram.
+
+Dealing with Internal Resistance
+There was a lot of internal resistance when it came to Non-Functional Requirements, like using Docker. Part of me felt like it was an unnecessary extra step that made the work harder. However, as a student who wants a professional portfolio, I knew it was important for "Maintainability."
+
+Conclusion
+Even though I am the only person working on this, using GitHub Issues and Projects helped me stay organized. When I saw a "Must-have" task sitting in the "To Do" column, it forced me to stop procrastinating and start working. This assignment taught me that Agile isn't just for big companies; it’s a way to manage your own time and stop "scope creep" from making a project impossible to finish.
