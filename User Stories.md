@@ -15,3 +15,19 @@
 | US-011| As a Product Owner, I want to review retention metrics so that I can understand how many users return to the app. | 1. Dashboard displays weekly active users (WAU). 2. Metrics show average session length. 3. Data is private to admin/owner roles. | Low |
 | US-012 | As a Software Developer, I want the system containerized with Docker so that the application runs consistently across Windows and Linux. | 1. Dockerfile and docker-compose.yml present. 2. Container builds successfully on both OS. 3. Database and App link via internal network.| Medium|
 
+## Product Backlog Creation:
+
+| Story ID | User Story | Priority(MoScow) | Effort Estimate(1-5) | Dependencies |
+|----------|------------|---------------------|----------|---------|
+|US-001| Create secute account | Must-have| 5| None|
+| US-002| log an expense | Must-have| 3| US-001|
+| US-003| categorize expenses | Must-have | 2| US-002|
+| US-OO4| set a monthly budget| Should-have| 4| US-003|
+| US-005 | search and filter past expenses|Should-have| 2 | None |
+| US-006 | view a visual spending chart | Should-have| 4| US-002|
+| US-007| export data to CSV | Could-have | 2 | US-002 |
+| US-008| switch between currencies | Could-have | 4 | None|
+| US-009 | passwords hashed | Must-have | 3 | US-001 |
+|US-010 | manage backups | Could-have | 4 | None|
+|US-011| retention metrics | Won't-have | 5 | US-001 |
+|US-12 | system containerized | Should-have | 3| None |
