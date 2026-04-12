@@ -12,3 +12,5 @@ Justification for Selection:
 
 I have selected the Automated Kanban template. It aligns with my project needs because it automatically moves issues across the board as 
 I open or close them, ensuring that the Sprint Tracking is always up-to-date with minimal manual effort.
+
+## 3.Kanban Board Explanation
