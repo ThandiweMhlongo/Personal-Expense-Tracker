@@ -3,6 +3,37 @@
 ## Introduction
 SimpleSpend is a lightweight, web-based application designed to help individuals regain control of their financial health. The system allows users to log daily expenses, categorize them, and visualize their spending habits through a clean, intuitive interface. By providing a centralized place for financial tracking, SimpleSpend eliminates the need for messy spreadsheets or manual paper logging.
 
+## 1. Language Choice
+Language: Java 17
+
+Build Tool: Maven
+
+Rationale: I chose Java because it is a strongly typed language, which means it helps catch mistakes early. Maven is used to manage dependencies like JUnit 5, ensuring that the testing environment is consistent for all developers.
+
+## 2. Design Patterns & Rationales
+|Pattern| Where its used|Why it was used|
+|-------|------------|------------------|
+|Singleton|DatabaseSingleton|We only ever need one DatabaseManager to talk to our data. This prevents multiple connections from getting tangled up.|
+|Simple Factory|CategoryFactory|Instead of creating "General" or "Custom" categories everywhere, we have one factory that knows how to make them perfectly.|
+|Factory Method|ExporterProvider|This allows the system to support different ways to save data (like CSV) without changing the core expense code.| 
+|Abstract Factory|UserAccountFactory|When a new person joins SimpleSpend, we need to make a "Matching Set" of a User and a Budget at the exact same time.|
+|Builder|ExpenseBuilder|The Expense class has many parts (ID, amount, date, description). The Builder lets us add them one-by-one so we don't mix them up.|
+|Prototype|ExpenseRegistry|For repeating costs (like Rent), we use a "Copy Cat" to clone an existing expense instead of typing it all over again.|
+
+## 3. Key Design Decisions
+Encapsulation: All attributes in the model classes (like amount in Expense) are private. This keeps our data safe from being changed by accident.
+
+Separation of Concerns: We put our "Toys" (Models) in one drawer and our "Machines" (Creational Patterns) in another drawer to keep the project organized.
+
+Testing-First: We implemented Unit Tests for every pattern to ensure that when we "press a button," the right object comes out.
+
+## 4. How to Run the Project
+Ensure you have Java 17 and IntelliJ installed.
+
+Open the project and wait for Maven to load the pom.xml.
+
+To run tests: Right-click the src/test/java folder and select "Run All Tests".
+
 ## Project Links
 [SPECIFACTION.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/SPECIFICATION.md)
 
