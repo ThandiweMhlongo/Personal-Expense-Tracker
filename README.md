@@ -80,6 +80,114 @@ Calling RepositoryFactory.getExpenseRepository("MEMORY") returns the HashMap bas
 
 The system is "Future-Proofed" because adding a new storage type (like JSON or MySQL) simply requires adding a new case to the Factory without breaking existing code.
 
+## Updated class diagram:
+
+```mermaid
+classDiagram
+    %% Core Models
+    class User {
+        -String userId
+        -String username
+        -String passwordHash
+        -String currencyPreference
+        +register()
+        +login()
+        +updateProfile()
+    }
+
+    class Expense {
+        -String expenseId
+        -double amount
+        -Date date
+        -String description
+        +getExpenseId() String
+        +save()
+        +update()
+        +remove()
+    }
+
+    class Category {
+        -String categoryId
+        -String name
+        -boolean isDefault
+        +getCategoryId() String
+        +editName()
+    }
+
+    class Budget {
+        -String budgetId
+        -double monthlyLimit
+        -String monthYear
+        +setLimit()
+        +getRemaining()
+    }
+
+    %% Persistence Layer (Repository Pattern)
+    class Repository~T, ID~ {
+        <<interface>>
+        +save(T entity)
+        +findById(ID id) Optional~T~
+        +findAll() List~T~
+        +delete(ID id)
+    }
+
+    class ExpenseRepository {
+        <<interface>>
+    }
+
+    class CategoryRepository {
+        <<interface>>
+    }
+
+    class InMemoryExpenseRepository {
+        -Map~String, Expense~ storage
+        +save(Expense entity)
+        +findById(String id)
+    }
+
+    class DatabaseExpenseRepositoryStub {
+        +save(Expense entity)
+        +findById(String id)
+    }
+
+    %% Factory Layer
+    class RepositoryFactory {
+        +getExpenseRepository(String type) ExpenseRepository
+        +getCategoryRepository(String type) CategoryRepository
+    }
+
+    %% Relationships
+    Repository <|-- ExpenseRepository : extends
+    Repository <|-- CategoryRepository : extends
+    
+    ExpenseRepository <|.. InMemoryExpenseRepository : implements
+    ExpenseRepository <|.. DatabaseExpenseRepositoryStub : implements (Future-Proof)
+    
+    RepositoryFactory ..> ExpenseRepository : creates
+    RepositoryFactory ..> CategoryRepository : creates
+
+    User "1" -- "0..*" Expense : tracks
+    User "1" -- "0..*" Budget : defines
+    User "1" -- "0..*" Category : manages
+    Category "1" -- "0..*" Expense : classifies
+    
+    %% Repositories manage Models
+    ExpenseRepository ..> Expense : manages
+    CategoryRepository ..> Category : manages
+```
+
+Generics Implementation: Added the Repository<T, ID> interface at the top of the hierarchy.
+
+Specific Repositories: Added ExpenseRepository and CategoryRepository interfaces.
+
+Multiple Implementations: * InMemoryExpenseRepository: Your current working HashMap storage.
+
+DatabaseExpenseRepositoryStub: The future-proof placeholder you implemented in the code.
+
+Abstraction: Added the RepositoryFactory showing that it "creates" the interfaces, decoupling your main logic from the storage type.
+
+Model Updates: Added getExpenseId() and getCategoryId() to the classes, as these are necessary for the repository to function.
+
 ## Project Links
 [SPECIFACTION.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/SPECIFICATION.md)
 
