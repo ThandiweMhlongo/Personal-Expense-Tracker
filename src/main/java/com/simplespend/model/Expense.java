@@ -23,6 +23,13 @@ public class Expense implements Cloneable {
         return super.clone();
     }
 
-    public double getAmount() { return amount; }
-    public String getDescription() { return description; }
+    public double getAmount() {
+        return amount;
+    }
+    public String getDescription() {
+        return description;
+    }
+    public String getExpenseId() {
+        return expenseId;
+    }
 }

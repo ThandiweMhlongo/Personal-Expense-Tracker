@@ -12,5 +12,9 @@ public class Category {
     }
 
     public void editName(String newName) { this.name = newName; }
-    public String getName() { return name; }
+    public String getName() {
+        return name;
+    }
+    public String getCategoryId() {
+        return categoryId; }
 }

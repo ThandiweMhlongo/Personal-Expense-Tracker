@@ -1,6 +1,5 @@
 package com.simplespend.creational;
 
-// This is the interface for our specialists
 interface Exporter {
     void export();
 }

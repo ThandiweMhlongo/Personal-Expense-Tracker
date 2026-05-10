@@ -4,7 +4,7 @@ import com.simplespend.model.DatabaseManager;
 public class DatabaseSingleton {
     private static DatabaseManager instance;
 
-    private DatabaseSingleton() {} // Private so nobody else can make one!
+    private DatabaseSingleton() {}
 
     public static synchronized DatabaseManager getInstance() {
         if (instance == null) {

@@ -17,7 +17,6 @@ public class User {
     public void login() { System.out.println("User " + username + " logged in."); }
     public void updateProfile() { System.out.println("Profile updated."); }
 
-    // Getters and Setters
     public String getUserId() { return userId; }
     public String getUsername() { return username; }
 }
