@@ -3,6 +3,191 @@
 ## Introduction
 SimpleSpend is a lightweight, web-based application designed to help individuals regain control of their financial health. The system allows users to log daily expenses, categorize them, and visualize their spending habits through a clean, intuitive interface. By providing a centralized place for financial tracking, SimpleSpend eliminates the need for messy spreadsheets or manual paper logging.
 
+## 1. Language Choice
+Language: Java 17
+
+Build Tool: Maven
+
+Rationale: I chose Java because it is a strongly typed language, which means it helps catch mistakes early. Maven is used to manage dependencies like JUnit 5, ensuring that the testing environment is consistent for all developers.
+
+## 2. Design Patterns & Rationales
+|Pattern| Where its used|Why it was used|
+|-------|------------|------------------|
+|Singleton|DatabaseSingleton|We only ever need one DatabaseManager to talk to our data. This prevents multiple connections from getting tangled up.|
+|Simple Factory|CategoryFactory|Instead of creating "General" or "Custom" categories everywhere, we have one factory that knows how to make them perfectly.|
+|Factory Method|ExporterProvider|This allows the system to support different ways to save data (like CSV) without changing the core expense code.| 
+|Abstract Factory|UserAccountFactory|When a new person joins SimpleSpend, we need to make a "Matching Set" of a User and a Budget at the exact same time.|
+|Builder|ExpenseBuilder|The Expense class has many parts (ID, amount, date, description). The Builder lets us add them one-by-one so we don't mix them up.|
+|Prototype|ExpenseRegistry|For repeating costs (like Rent), we use a "Copy Cat" to clone an existing expense instead of typing it all over again.|
+
+## 3. Key Design Decisions
+Encapsulation: All attributes in the model classes (like amount in Expense) are private. This keeps our data safe from being changed by accident.
+
+Separation of Concerns: We put our "Toys" (Models) in one drawer and our "Machines" (Creational Patterns) in another drawer to keep the project organized.
+
+Testing-First: We implemented Unit Tests for every pattern to ensure that when we "press a button," the right object comes out.
+
+## 4. How to Run the Project
+Ensure you have Java 17 and IntelliJ installed.
+
+Open the project and wait for Maven to load the pom.xml.
+
+To run tests: Right-click the src/test/java folder and select "Run All Tests".
+
+## Assignment 11: Implementing a Persistence Repository Layer
+
+## Repository Interdace Design Justification
+
+## Use of Generics:
+I implemented a base generic interface Repository<T, ID> located in the com.simplespend.repositories package.
+
+## Avoidance of Duplication: 
+Instead of defining save(), findById(), findAll(), and delete() separately for Expense, Category, and Budget, I used a generic type <T> for the entity and <ID> for the primary key.
+
+## Consistency: 
+This ensures that all repository implementations follow a uniform CRUD (Create, Read, Update, Delete) contract, making the system easier to maintain and extend.
+
+## Entity-Specific Interfaces
+I created specific interfaces like ExpenseRepository and CategoryRepository that extend the generic Repository.
+
+## Type Safety: 
+By extending the generic interface (e.g., ExpenseRepository extends Repository<Expense, String>), I ensure that the repository only handles the correct domain objects, preventing runtime type errors.
+
+## Extensibility: 
+If a specific entity requires a unique query (for example, findByDate() for Expenses), it can be added to the specific interface without cluttering the base generic repository.
+
+By placing these interfaces in a dedicated repositories package, the domain logic (Models) remains completely unaware of how data is stored. This allows the storage mechanism (In-Memory, File System, or SQL) to be swapped out via the RepositoryFactory without changing a single line of business logic in the Expense or User classes.
+
+## Storage-Abstraction Mechanism Justification
+
+## Pattern Choice: Factory Pattern
+For this implementation, I chose the Factory Pattern (implemented in RepositoryFactory.java) to handle storage abstraction.
+
+## Why Factory Pattern over Dependency Injection (DI):
+
+Simplicity & Reduced Overhead: Since this project is a standalone Java application without a heavy framework like Spring or Guice, implementing a full DI container would add unnecessary complexity. The Factory Pattern provides a clean, "pojo-friendly" way to swap implementations.
+
+Centralized Control: The RepositoryFactory acts as a single point of truth. If we decide to move from InMemory to Database storage, we only need to update the logic inside the Factory methods.
+
+Dynamic Selection: The Factory allows the application to choose a storage backend at runtime based on a configuration string (e.g., "MEMORY" or "DATABASE"). This is highly effective for testing environments where you might want to use In-Memory storage while using SQL for production.
+
+Decoupling: The client code (the Services or UI) only ever interacts with the interfaces (e.g., ExpenseRepository). It has zero knowledge of the concrete classes like InMemoryExpenseRepository, ensuring a true separation of concerns.
+
+## How it Works:
+The RepositoryFactory uses a switch or if-else logic to return the requested implementation:
+
+Calling RepositoryFactory.getExpenseRepository("MEMORY") returns the HashMap based storage.
+
+The system is "Future-Proofed" because adding a new storage type (like JSON or MySQL) simply requires adding a new case to the Factory without breaking existing code.
+
+## Updated class diagram:
+
+```mermaid
+classDiagram
+    %% Core Models
+    class User {
+        -String userId
+        -String username
+        -String passwordHash
+        -String currencyPreference
+        +register()
+        +login()
+        +updateProfile()
+    }
+
+    class Expense {
+        -String expenseId
+        -double amount
+        -Date date
+        -String description
+        +getExpenseId() String
+        +save()
+        +update()
+        +remove()
+    }
+
+    class Category {
+        -String categoryId
+        -String name
+        -boolean isDefault
+        +getCategoryId() String
+        +editName()
+    }
+
+    class Budget {
+        -String budgetId
+        -double monthlyLimit
+        -String monthYear
+        +setLimit()
+        +getRemaining()
+    }
+
+    %% Persistence Layer (Repository Pattern)
+    class Repository~T, ID~ {
+        <<interface>>
+        +save(T entity)
+        +findById(ID id) Optional~T~
+        +findAll() List~T~
+        +delete(ID id)
+    }
+
+    class ExpenseRepository {
+        <<interface>>
+    }
+
+    class CategoryRepository {
+        <<interface>>
+    }
+
+    class InMemoryExpenseRepository {
+        -Map~String, Expense~ storage
+        +save(Expense entity)
+        +findById(String id)
+    }
+
+    class DatabaseExpenseRepositoryStub {
+        +save(Expense entity)
+        +findById(String id)
+    }
+
+    %% Factory Layer
+    class RepositoryFactory {
+        +getExpenseRepository(String type) ExpenseRepository
+        +getCategoryRepository(String type) CategoryRepository
+    }
+
+    %% Relationships
+    Repository <|-- ExpenseRepository : extends
+    Repository <|-- CategoryRepository : extends
+    
+    ExpenseRepository <|.. InMemoryExpenseRepository : implements
+    ExpenseRepository <|.. DatabaseExpenseRepositoryStub : implements (Future-Proof)
+    
+    RepositoryFactory ..> ExpenseRepository : creates
+    RepositoryFactory ..> CategoryRepository : creates
+
+    User "1" -- "0..*" Expense : tracks
+    User "1" -- "0..*" Budget : defines
+    User "1" -- "0..*" Category : manages
+    Category "1" -- "0..*" Expense : classifies
+    
+    %% Repositories manage Models
+    ExpenseRepository ..> Expense : manages
+    CategoryRepository ..> Category : manages
+```
+
+Generics Implementation: Added the Repository<T, ID> interface at the top of the hierarchy.
+
+Specific Repositories: Added ExpenseRepository and CategoryRepository interfaces.
+
+Multiple Implementations: * InMemoryExpenseRepository: Your current working HashMap storage.
+
+DatabaseExpenseRepositoryStub: The future-proof placeholder you implemented in the code.
+
+Abstraction: Added the RepositoryFactory showing that it "creates" the interfaces, decoupling your main logic from the storage type.
+
+Model Updates: Added getExpenseId() and getCategoryId() to the classes, as these are necessary for the repository to function.
+
 ## Project Links
 [SPECIFACTION.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/SPECIFICATION.md)
 
