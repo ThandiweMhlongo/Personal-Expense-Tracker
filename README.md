@@ -34,6 +34,52 @@ Open the project and wait for Maven to load the pom.xml.
 
 To run tests: Right-click the src/test/java folder and select "Run All Tests".
 
+## Assignment 11: Implementing a Persistence Repository Layer
+
+## Repository Interdace Design Justification
+
+## Use of Generics:
+I implemented a base generic interface Repository<T, ID> located in the com.simplespend.repositories package.
+
+## Avoidance of Duplication: 
+Instead of defining save(), findById(), findAll(), and delete() separately for Expense, Category, and Budget, I used a generic type <T> for the entity and <ID> for the primary key.
+
+## Consistency: 
+This ensures that all repository implementations follow a uniform CRUD (Create, Read, Update, Delete) contract, making the system easier to maintain and extend.
+
+## Entity-Specific Interfaces
+I created specific interfaces like ExpenseRepository and CategoryRepository that extend the generic Repository.
+
+## Type Safety: 
+By extending the generic interface (e.g., ExpenseRepository extends Repository<Expense, String>), I ensure that the repository only handles the correct domain objects, preventing runtime type errors.
+
+## Extensibility: 
+If a specific entity requires a unique query (for example, findByDate() for Expenses), it can be added to the specific interface without cluttering the base generic repository.
+
+By placing these interfaces in a dedicated repositories package, the domain logic (Models) remains completely unaware of how data is stored. This allows the storage mechanism (In-Memory, File System, or SQL) to be swapped out via the RepositoryFactory without changing a single line of business logic in the Expense or User classes.
+
+## Storage-Abstraction Mechanism Justification
+
+## Pattern Choice: Factory Pattern
+For this implementation, I chose the Factory Pattern (implemented in RepositoryFactory.java) to handle storage abstraction.
+
+## Why Factory Pattern over Dependency Injection (DI):
+
+Simplicity & Reduced Overhead: Since this project is a standalone Java application without a heavy framework like Spring or Guice, implementing a full DI container would add unnecessary complexity. The Factory Pattern provides a clean, "pojo-friendly" way to swap implementations.
+
+Centralized Control: The RepositoryFactory acts as a single point of truth. If we decide to move from InMemory to Database storage, we only need to update the logic inside the Factory methods.
+
+Dynamic Selection: The Factory allows the application to choose a storage backend at runtime based on a configuration string (e.g., "MEMORY" or "DATABASE"). This is highly effective for testing environments where you might want to use In-Memory storage while using SQL for production.
+
+Decoupling: The client code (the Services or UI) only ever interacts with the interfaces (e.g., ExpenseRepository). It has zero knowledge of the concrete classes like InMemoryExpenseRepository, ensuring a true separation of concerns.
+
+## How it Works:
+The RepositoryFactory uses a switch or if-else logic to return the requested implementation:
+
+Calling RepositoryFactory.getExpenseRepository("MEMORY") returns the HashMap based storage.
+
+The system is "Future-Proofed" because adding a new storage type (like JSON or MySQL) simply requires adding a new case to the Factory without breaking existing code.
+
 ## Project Links
 [SPECIFACTION.md](https://github.com/ThandiweMhlongo/Personal-Expense-Tracker/blob/5f1017936b849cdfcb745ac3efd442b7e36adef9/SPECIFICATION.md)
 
